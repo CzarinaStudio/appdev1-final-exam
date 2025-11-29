@@ -2,7 +2,7 @@
   "name": "appdev1-final-exam",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://CzarinaStudio.github.io/appdev1-final-exam/",
+  "homepage": "https://CzarinaStudio.github.io/appdev1-final-exam/", 
   "type": "module",
   "scripts": {
     "dev": "vite",
