@@ -8,13 +8,15 @@ function Login() {
     const [password, setPassword] = useState("");
     const [users, setUsers] = useState([]);
 
+    // Environment Variables (Correctly accessed)
     const SECRET = import.meta.env.VITE_APP_SECRET_PASSWORD;
     const API_URL = import.meta.env.VITE_APP_API_URL;
     
     useEffect(() => {
-        axios.get(`${API_URL}/users?_limit=3`)
+        // FIX 1 & 2: Use axios and the API_URL environment variable (limit=3 is standard for this mock data)
+        axios.get(`${API_URL}/users?_limit=3`) 
             .then(response => {
-                setUsers(response.data);
+                setUsers(response.data); // Axios data is in response.data
             })
             .catch(error => {
                 console.error("Error fetching users:", error);
@@ -23,6 +25,7 @@ function Login() {
     }, [API_URL]);
 
     function handleLogin() {
+        // Find user (case-insensitive username check)
         const foundUser = users.find(user => user.username.toLowerCase() === username.toLowerCase());
 
         if (!foundUser) {
@@ -30,21 +33,29 @@ function Login() {
             return;
         }
 
+        // Check password against the environment variable secret
         if (password !== SECRET) {
             alert("Incorrect password!");
             return;
         }
 
+        // Store user in localStorage upon successful login
         localStorage.setItem("loggedInUser", JSON.stringify(foundUser));
+        
+        // FIX 3: Use useNavigate for redirection
         navigate("/todos");
     }
 
     return (
-        <div style={{ padding: '20px', textAlign: 'center' }}>
+        // Apply the CSS class for styling
+        <div className="login-container"> 
             <h2>Login</h2>
-            <p>Try logging in with 'Bret' or 'Antonette'. Password is '{SECRET}'.</p>
+            {/* Added hint for testing */}
+            <p className="login-hint">Try logging in with 'Bret' or 'Antonette'. Password is '{SECRET}'.</p>
+            
             <input 
                 type="text" 
+                className="login-input"
                 placeholder="Enter username (E.g., Bret)" 
                 value={username} 
                 onChange={(e) => setUsername(e.target.value)} 
@@ -52,12 +63,18 @@ function Login() {
             <br />
             <input 
                 type="password" 
+                className="login-input"
                 placeholder="Enter password" 
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
             />
             <br />
-            <button onClick={handleLogin} style={{ marginTop: '10px' }}>Login</button>
+            <button 
+                onClick={handleLogin} 
+                className="login-button" 
+            >
+                Login
+            </button>
         </div>
     );
 }
